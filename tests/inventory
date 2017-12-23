@@ -1,0 +1,1 @@
+192.168.10.10 ansible_ssh_user=ubuntu ansible_python_interpreter=/usr/bin/python3
