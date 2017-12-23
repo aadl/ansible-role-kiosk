@@ -5,7 +5,9 @@
 
 # Use a very basic window manager and login manager
 - name: install xorg and window managers
-  apt: name={{item}} state=installed
+  apt: 
+    name: "{{item}}" 
+    state: installed
   with_items:
     - xorg
     - openbox
@@ -29,8 +31,6 @@
     regexp: "^sessiondir "
     line: "#sessiondir "
     backrefs: yes
-
-# Copy over a basic menu which just lets staff reboot the machine
 - name: copy openbox menu config
   copy:
     src: openbox-menu.xml
@@ -43,7 +43,7 @@
     src: openbox-rc.xml
     dest: /etc/xdg/openbox/rc.xml
 
-# Set openbox to disable screen blanking and launch chrome on boot
+# Set openbox to disable screen blanking and launch a kiosk command on boot
 - name: copy openbox autostart
   template:
     src: autostart.sh.j2
