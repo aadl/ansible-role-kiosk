@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: Ann Arbor District Library
+  description: Xorg / Slim / Openbox kiosk setup
+  license: GPLv3
+
+  platforms:
+  - name: Ubuntu
+    versions:
+    - xenial
