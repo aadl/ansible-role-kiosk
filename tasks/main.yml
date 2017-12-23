@@ -1,0 +1,50 @@
+- name: update apt if it has been awhile
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+# Use a very basic window manager and login manager
+- name: install xorg and window managers
+  apt: name={{item}} state=installed
+  with_items:
+    - xorg
+    - openbox
+    - slim
+
+- name: set autologin for slim
+  lineinfile:
+    dest: /etc/slim.conf
+    regexp: "^auto_login "
+    insertafter: "^#auto_login "
+    line: "auto_login yes"
+- name: set default username for slim
+  lineinfile:
+    dest: /etc/slim.conf
+    regexp: "^default_user "
+    insertafter: "^#default_user "
+    line: "default_user {{default_user}}"
+- name: remove xsession directory from slim
+  lineinfile:
+    dest: /etc/slim.conf
+    regexp: "^sessiondir "
+    line: "#sessiondir "
+    backrefs: yes
+
+# Copy over a basic menu which just lets staff reboot the machine
+- name: copy openbox menu config
+  copy:
+    src: openbox-menu.xml
+    dest: /etc/xdg/openbox/menu.xml
+
+# Copy over a stripped down version of openbox keyboard/mouse config
+# Disables multiple desktops and their shortcuts
+- name: copy openbox mapping config
+  copy:
+    src: openbox-rc.xml
+    dest: /etc/xdg/openbox/rc.xml
+
+# Set openbox to disable screen blanking and launch chrome on boot
+- name: copy openbox autostart
+  template:
+    src: autostart.sh.j2
+    dest: /etc/xdg/openbox/autostart
